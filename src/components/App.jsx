@@ -69,8 +69,7 @@ class App extends Component {
       <div
         style={{
           height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
+          marginLeft: 30,
           fontSize: 20,
           color: '#010101',
         }}

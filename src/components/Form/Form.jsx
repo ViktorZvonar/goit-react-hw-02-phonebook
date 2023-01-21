@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
 import css from './Form.module.css';
 
 class Form extends Component {
@@ -29,10 +30,11 @@ class Form extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label htmlFor={this.nameInputId}>
+      <form className={css.form} onSubmit={this.handleSubmit}>
+        <label className={css.label} htmlFor={this.nameInputId}>
           Name
           <input
+            className={css.input}
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -43,7 +45,7 @@ class Form extends Component {
             required
           />
         </label>
-        <label htmlFor={this.nameInputId}>
+        <label className={css.label} htmlFor={this.nameInputId}>
           Number
           <input
             className={css.input}
@@ -58,10 +60,16 @@ class Form extends Component {
           />
         </label>
 
-        <button type="submit">Add contact</button>
+        <button className={css.btn} type="submit">
+          Add contact
+        </button>
       </form>
     );
   }
 }
 
 export default Form;
+
+Form.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

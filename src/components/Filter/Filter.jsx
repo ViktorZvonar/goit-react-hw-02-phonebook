@@ -2,9 +2,15 @@ import PropTypes from 'prop-types';
 import css from './Filter.module.css';
 
 const Filter = ({ filter, onChange }) => (
-  <label className={css.form_label}>
+  <label className={css.filter}>
     Find contacts by name
-    <input onChange={onChange} type="text" name="filter" filter={filter} />
+    <input
+      className={css.find}
+      onChange={onChange}
+      type="text"
+      name="filter"
+      filter={filter}
+    />
   </label>
 );
 
