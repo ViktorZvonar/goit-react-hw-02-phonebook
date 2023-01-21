@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 
 import Form from './Form/Form';
 import ContactList from './Contacts/ContactList';
+import Filter from './Filter/Filter';
 
 class App extends Component {
   state = {
@@ -12,34 +13,32 @@ class App extends Component {
       { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
+    filter: '',
   };
 
-  nameInputId = nanoid();
-  phoneInputId = nanoid();
+  formSubmitHandler = ({ name, number }) => {
+    const contact = {
+      id: nanoid(),
+      name,
+      number,
+    };
 
-  addContact = ({ name, number }) => {
     const normalizedFind = name.toLowerCase();
-    const findName = this.state.contacts.find(
-      contact => contact.name.toLowerCase() === normalizedFind
-    );
-    if (findName) {
-      return alert(`${name} is already in contacts.`);
+    const { contacts } = this.state;
+
+    if (
+      contacts.find(contact => contact.name.toLowerCase() === normalizedFind)
+    ) {
+      return alert(`This contact is already in your book.`);
     }
 
-    const findNumber = this.state.contacts.find(
-      contact => contact.number === number
-    );
-    if (findNumber) {
-      return alert(`This phone number is already in use.`);
+    if (contacts.find(contact => contact.number === number)) {
+      return alert(`This number is already in your book.`);
     }
 
     this.setState(({ contacts }) => ({
-      contacts: [{ name, number, id: nanoid() }, ...contacts],
+      contacts: [contact, ...contacts],
     }));
-  };
-
-  formSubmitHandler = data => {
-    console.log(data);
   };
 
   deleteContact = contactId => {
@@ -48,8 +47,24 @@ class App extends Component {
     }));
   };
 
+  handleFilter = e => {
+    const { name, value } = e.currentTarget;
+    this.setState({ [name]: value });
+  };
+
+  filterContacts = () => {
+    const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+    const filtered = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+    return filtered;
+  };
+
   render() {
-    const { contacts } = this.state;
+    // const { contacts } = this.state;
+    const { filter } = this.state;
+    const filteredContacts = this.filterContacts();
     return (
       <div
         style={{
@@ -61,10 +76,14 @@ class App extends Component {
         }}
       >
         <h1>Phonebook</h1>
-        <Form onSubmit={this.addContact} />
+        <Form onSubmit={this.formSubmitHandler} />
 
         <h1>Contacts</h1>
-        <ContactList contacts={contacts} onDeleteContact={this.deleteContact} />
+        <Filter filter={filter} onChange={this.handleFilter} />
+        <ContactList
+          contacts={filteredContacts}
+          onDeleteContact={this.deleteContact}
+        />
       </div>
     );
   }
